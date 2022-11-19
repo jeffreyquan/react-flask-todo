@@ -1,12 +1,22 @@
 version: "3"
 
 services:
+  database:
+    build: ./database
+    restart: always
+    volumes:
+      - ./database/volumes:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file: ./database/.env
   backend:
     build: ./backend
     container_name: backend
     ports:
       - 5000:5000
-
+    depends_on:
+      - database
+    env_file: ./backend/.env
   frontend:
     build: ./frontend
     container_name: frontend
