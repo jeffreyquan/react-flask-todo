@@ -1,2 +1,3 @@
 database/volumes
 .env
+.env.prod
