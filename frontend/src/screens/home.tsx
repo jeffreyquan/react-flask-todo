@@ -1,5 +1,7 @@
 import * as React from "react";
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export function Home() {
   return (
     <div>
@@ -18,7 +20,7 @@ interface Task {
 function List() {
   const [tasks, setTasks] = React.useState<Task[]>([]);
   React.useEffect(() => {
-    fetch("http://localhost:5000/api/tasks")
+    fetch(`${apiUrl}/api/tasks`)
       .then((res) => res.json())
       .then((data) => setTasks(data.tasks));
   }, []);
@@ -32,7 +34,7 @@ function List() {
 }
 
 const addTask = (description: string) =>
-  fetch("http://localhost:5000/api/tasks", {
+  fetch(`${apiUrl}/api/tasks`, {
     method: "POST",
     headers: {
       Accept: "application/json",
