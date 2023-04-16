@@ -1,10 +1,32 @@
 import * as React from "react";
 
+const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
 export function Home() {
+  const [tasks, setTasks] = React.useState<Task[]>([]);
+  React.useEffect(() => {
+    fetch(`${apiUrl}/api/tasks`)
+      .then((res) => res.json())
+      .then((data) => setTasks(data.tasks));
+  }, []);
+
+  const addTask = async (description: string) => {
+    await createTask(description);
+
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      {
+        id: prevTasks.length,
+        description,
+        isCompleted: false,
+      },
+    ]);
+  };
+
   return (
     <div>
-      <NewTask />
-      <List />
+      <NewTask addTask={addTask} />
+      <List tasks={tasks} />
     </div>
   );
 }
@@ -15,13 +37,11 @@ interface Task {
   isCompleted: boolean;
 }
 
-function List() {
-  const [tasks, setTasks] = React.useState<Task[]>([]);
-  React.useEffect(() => {
-    fetch("http://localhost:5000/api/tasks")
-      .then((res) => res.json())
-      .then((data) => setTasks(data.tasks));
-  }, []);
+interface ListProps {
+  tasks: Task[];
+}
+
+function List({ tasks }: ListProps) {
   return (
     <div>
       {tasks?.map((task) => (
@@ -31,8 +51,8 @@ function List() {
   );
 }
 
-const addTask = (description: string) =>
-  fetch("http://localhost:5000/api/tasks", {
+const createTask = (description: string) =>
+  fetch(`${apiUrl}/api/tasks`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -41,7 +61,11 @@ const addTask = (description: string) =>
     body: JSON.stringify({ description }),
   });
 
-function NewTask() {
+interface NewTaskProps {
+  addTask: (description: string) => Promise<void>;
+}
+
+function NewTask({ addTask }: NewTaskProps) {
   const [description, setDescription] = React.useState("");
   return (
     <div>

@@ -9,17 +9,28 @@ services:
       - ./database/volumes:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    env_file: ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - APP_DB_USER=${APP_DB_USER}
+      - APP_DB_PASS=${APP_DB_PASS}
+      - APP_DB_NAME=${APP_DB_NAME}
+
   backend:
     build: ./backend
     container_name: backend
     ports:
-      - 5000:5000
+      - 5000:8080
     depends_on:
       - database
-    env_file: ./backend/.env.prod
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_NAME=${DATABASE_NAME}
+
   frontend:
     build: ./frontend
     container_name: frontend
     ports:
       - 3000:80
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}

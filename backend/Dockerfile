@@ -20,5 +20,5 @@ RUN pipenv install --system --deploy
 RUN pip install gunicorn
 
 # Start app
-EXPOSE 5000
-CMD ["gunicorn","-b","0.0.0.0:5000", "app.main:app"]
+EXPOSE 8080
+CMD ["gunicorn","-b","0.0.0.0:8080", "app.main:app"]

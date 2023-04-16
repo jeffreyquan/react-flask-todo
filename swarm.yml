@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  database:
+    image: react-flask-todo-database
+    volumes:
+      - todo-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      APP_DB_USER: docker
+      APP_DB_PASS: docker
+      APP_DB_NAME: taskdb
+
+  backend:
+    image: react-flask-todo-backend
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_URL: postgresql+psycopg2://docker:docker@database:5432
+      DATABASE_NAME: taskdb
+    depends_on:
+      - database
+
+  frontend:
+    image: react-flask-todo-frontend
+    environment:
+      REACT_APP_API_URL: http://backend:8080
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+
+volumes:
+  todo-data:
