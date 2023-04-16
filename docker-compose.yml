@@ -14,7 +14,7 @@ services:
     build: ./backend
     container_name: backend
     ports:
-      - 5000:5000
+      - 8080:8080
     depends_on:
       - database
     env_file: ./backend/.env.prod
