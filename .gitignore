@@ -3,3 +3,4 @@ database/volumes
 .env.prod
 
 config
+.DS_STORE
