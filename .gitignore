@@ -1,3 +1,5 @@
 database/volumes
 .env
 .env.prod
+
+config
