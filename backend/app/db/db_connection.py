@@ -28,4 +28,4 @@ class DatabaseConnection:
     session.close()
 
   def row_to_dict(self, result):
-      return [dict(row) for row in result]
+      return [row._asdict() for row in result]
