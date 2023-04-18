@@ -2,7 +2,9 @@ version: "3.7"
 
 services:
   database:
-    image: react-flask-todo-database
+    image: react-flask-todo_database
+    deploy:
+      mode: global
     volumes:
       - todo-data:/var/lib/postgresql/data
     ports:
@@ -15,7 +17,9 @@ services:
       APP_DB_NAME: taskdb
 
   backend:
-    image: react-flask-todo-backend
+    image: react-flask-todo_backend
+    deploy:
+      mode: global
     ports:
       - 8080:8080
     environment:
@@ -25,7 +29,9 @@ services:
       - database
 
   frontend:
-    image: react-flask-todo-frontend
+    image: react-flask-todo_frontend
+    deploy:
+      mode: global
     environment:
       REACT_APP_API_URL: http://backend:8080
     ports:
